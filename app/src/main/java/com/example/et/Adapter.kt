@@ -1,32 +1,25 @@
 package com.example.et
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
+import com.example.et.databinding.RecyclerviewAdapterBinding
 
 class Adapter : ListAdapter<ResultsItem, Adapter.ViewHolder>(ResultsItemDiffCallback()) {
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val name = view.findViewById<TextView>(R.id.name)
-        val height = view.findViewById<TextView>(R.id.height)
-        val birthYear = view.findViewById<TextView>(R.id.birth_year)
-        val gender = view.findViewById<TextView>(R.id.gender)
-    }
+    class ViewHolder(val binding: RecyclerviewAdapterBinding) :
+        RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.recyclerview_adapter, parent, false)
-        return ViewHolder(view)
+        val binding = RecyclerviewAdapterBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val result = getItem(position)
-        holder.name.text = result.name
-        holder.height.text = result.height
-        holder.birthYear.text = result.birthYear
-        holder.gender.text = result.gender
+        holder.binding.result = result
+        holder.binding.executePendingBindings()
     }
 
     private class ResultsItemDiffCallback : DiffUtil.ItemCallback<ResultsItem>() {
