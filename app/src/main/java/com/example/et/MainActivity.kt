@@ -15,19 +15,17 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val character = findViewById<RecyclerView>(R.id.recyclerview)
+        val adapter = Adapter()
+
+        character.layoutManager = LinearLayoutManager(this)
+        character.adapter = adapter
 
         ApiConfig.getService().getCharacter().enqueue(object : Callback<Responses> {
             override fun onResponse(call: Call<Responses>, response: Response<Responses>) {
                 if (response.isSuccessful) {
                     val responseBody = response.body()
                     val data = responseBody?.results
-                    val theadapter = Adapter(data as List<ResultsItem>)
-                    character.apply {
-                        layoutManager = LinearLayoutManager(this@MainActivity)
-                        setHasFixedSize(true)
-                        theadapter.notifyDataSetChanged()
-                        adapter = theadapter
-                    }
+                    adapter.submitList(data)
                 }
             }
 
