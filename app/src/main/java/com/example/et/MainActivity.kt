@@ -25,8 +25,7 @@ class MainActivity : AppCompatActivity() {
         ApiConfig.getService().getCharacter().enqueue(object : Callback<Responses> {
             override fun onResponse(call: Call<Responses>, response: Response<Responses>) {
                 if (response.isSuccessful) {
-                    val responseBody = response.body()
-                    val data = responseBody?.results
+                    val data = response.body()?.results
                     adapter.submitList(data)
                 }
             }
